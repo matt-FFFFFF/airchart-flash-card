@@ -16,7 +16,9 @@ the code wins: fix this file. Prune anything that drifts.
 
 Reproducible extractor that renders curated UK CAA airchart legend symbols from `legend.pdf`
 into per-symbol PNGs + a `cards.json` manifest. Pure Python 3.13, PyMuPDF (native vector
-render, not raster crop) + Pillow. Package: `legend_cards`.
+render, not raster crop) + Pillow. Package: `legend_cards`. A small static flashcard web app
+in `web/` plays quiz/multiple-choice games against those generated cards, previewed locally
+and deployed to GitHub Pages.
 
 ## STRUCTURE
 
@@ -29,7 +31,16 @@ src/legend_cards/
 └── specs.py             # stable re-export shim (CARDS, CardSpec) — E501/RUF001 exempt
 legend.pdf               # immutable source (1 page, 595.22×842pt, vector/text, 0 images)
 public/                  # generated deliverables (cards.json, symbols/*.png, contact-sheet.png)
+web/                     # AUTHORED static flashcard app; lives outside public/, not generated
+├── index.html           # game markup
+├── styles.css            # game styling
+├── app.js                # game/quiz logic, loads cards.json + distractors.json
+└── distractors.json      # authored aviation-domain wrong-answer pool for MC mode
+scripts/build-site.sh    # assembles public/ + web/ + .nojekyll into _site/ (deploy dir)
+.github/workflows/pages.yml  # on push to main: build-site.sh → deploy _site/ to Pages
+_site/                   # gitignored, assembled-only deploy output (never authored/committed)
 tests/                   # test_extract_legend.py: runs real CLI entry point end-to-end
+                         # test_flashcard_data.py: locks web/distractors.json shape/content
 ```
 
 ## WHERE TO LOOK
@@ -41,6 +52,9 @@ tests/                   # test_extract_legend.py: runs real CLI entry point end
 | Manifest/JSON shape | `generator._record` + `CardRecord`/`SourceBBoxRecord` TypedDicts |
 | Object-replay internals | `object_renderer.py` (`_draw_path` match on draw items, `_insert_selected_text`) |
 | CLI wiring | `pyproject.toml` `[project.scripts]` `extract-legend = legend_cards.generator:main` |
+| Edit flashcard game UI/logic | `web/app.js`, `web/index.html`, `web/styles.css` |
+| Add/adjust MC distractors | `web/distractors.json` — locked by `tests/test_flashcard_data.py` |
+| Preview/deploy the site | `.github/workflows/pages.yml`, `make preview`, `scripts/build-site.sh` |
 
 ## CODE MAP
 
@@ -67,10 +81,14 @@ tests/                   # test_extract_legend.py: runs real CLI entry point end
 
 - Do NOT raster-crop / rasterize with external tools (`sips` etc.) — root cause of the original
   black-background/blurry/offset bug. Render natively from PDF page-space coordinates only.
-- Do NOT edit `public/` by hand — it is regenerated wholesale (`generate` deletes `symbols/`).
+- Do NOT edit `public/` by hand — it is regenerated wholesale (`generate` deletes `symbols/`)
+  and byte-locked by `tests/test_extract_legend.py::test_public_assets_match_fresh_generation`.
 - Do NOT hand-edit generated `cards.json`; change `card_data.py` and regenerate.
 - Do NOT treat one PDF path as one symbol — legend symbols are composite drawing+text clusters;
   use `ObjectSelection(drawing_indices, texts)` via `object_card`.
+- Do NOT place authored web files in `public/` — it breaks the byte-lock test above. Authored
+  assets live only in `web/`; `scripts/build-site.sh` combines `public/` + `web/` into `_site/`
+  at build/deploy time, never the reverse.
 
 ## COMMANDS
 
@@ -79,10 +97,22 @@ make setup      # uv sync --all-groups
 make test       # ruff check . && basedpyright src tests && pytest -q
 make generate   # uv run extract-legend  → regenerate public/ from legend.pdf
 make build      # uv build (wheel + sdist)
+make preview    # scripts/build-site.sh → assembles _site/ (public/ + web/ + .nojekyll),
+                # serves it at http://localhost:8000
 ```
+
+Deploy is automatic: pushing to `main` triggers the `pages.yml` Action, which runs
+`scripts/build-site.sh` and publishes `_site/` to GitHub Pages (the workflow only builds and
+deploys — it does not run `make test`). One-time manual step for the repo owner: in
+Settings → Pages, set Source to "GitHub Actions".
 
 ## NOTES
 
 - Requires Python `>=3.13,<3.14`. Contact sheet needs `/System/Library/Fonts/Supplemental/Arial.ttf` (macOS-specific).
 - Coordinates in `card_data.py` are native PDF points on page 0; bbox drift = wrong crop.
 - Tests exercise the real CLI via `subprocess` (`filterwarnings = ["error"]`), not internal functions.
+- `web/distractors.json` is authored aviation-domain content (≥10 plausible wrong definitions
+  per card), not derived from the PDF; multiple-choice mode picks 3 at random per question.
+- `_site/` is assembled fresh each build/deploy and serves `distractors.json` from its root
+  beside `cards.json`, so the app's relative asset paths resolve correctly, including under
+  the `/airchart-flash-card/` Pages subpath.
