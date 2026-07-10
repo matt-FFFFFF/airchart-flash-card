@@ -161,7 +161,7 @@
                 els.choicesDiv.appendChild(btn);
             });
         } else {
-            els.answerText.textContent = card.definition;
+            els.answerText.textContent = '';
             els.answerText.hidden = true;
             els.revealBtn.style.display = 'inline-block';
             els.revealBtn.focus();
@@ -199,6 +199,7 @@
         if (answered) return;
         answered = true;
         els.revealBtn.style.display = 'none';
+        els.answerText.textContent = deck[currentIndex].definition;
         els.answerText.hidden = false;
         els.nextBtn.disabled = false;
         els.nextBtn.focus();
