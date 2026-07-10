@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airchart Legend Flashcards</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="app-header">
+        <h1>Airchart Legend Flashcards</h1>
+        <div class="controls">
+            <div class="mode-toggle" role="group" aria-label="Study mode">
+                <button id="mode-mc" aria-pressed="true">Multiple choice</button>
+                <button id="mode-answer" aria-pressed="false">Answer only</button>
+            </div>
+            <button id="reset" class="secondary-btn">Reset</button>
+        </div>
+        <p id="score" aria-live="polite">Score: 0 / 0</p>
+    </header>
+
+    <main class="container">
+        <p id="error" style="display: none;"></p>
+        
+        <section id="game" class="card-region">
+            <div class="card-visuals">
+                <p id="card-progress">Card 1 / 44</p>
+                <div class="image-wrapper">
+                    <img id="card-image" src="" alt="Airchart legend symbol">
+                </div>
+                <p id="card-category"></p>
+            </div>
+
+            <div id="mc-region" class="interactive-region">
+                <div id="choices" class="choices-grid"></div>
+            </div>
+
+            <div id="answer-region" class="interactive-region" style="display: none;">
+                <button id="reveal" class="primary-btn">Reveal</button>
+                <p id="answer" hidden></p>
+            </div>
+
+            <div class="actions">
+                <button id="next" class="primary-btn" disabled>Next</button>
+            </div>
+        </section>
+
+        <section id="end" style="display: none;" class="end-screen">
+            <h2>Complete!</h2>
+            <p id="result"></p>
+            <button id="restart" class="primary-btn">Restart</button>
+        </section>
+    </main>
+</body>
+</html>
