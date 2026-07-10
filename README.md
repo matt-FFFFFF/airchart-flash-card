@@ -87,3 +87,12 @@ Every push to `main` triggers the **Deploy to GitHub Pages** Action, which runs
 Symbols derived from the **Civil Aviation Authority, Aeronautical Chart ICAO
 1:500 000 legend (2006)**. This project is for training/revision purposes and is not
 an official navigation source — always use current, authoritative charts for flight.
+
+---
+
+## License
+
+This project's source code is licensed under the **Mozilla Public License 2.0** — see
+[`LICENSE`](LICENSE). The bundled `legend.pdf` and symbols derived from it remain
+© Civil Aviation Authority; the MPL 2.0 grant covers this project's own code, not that
+source material.

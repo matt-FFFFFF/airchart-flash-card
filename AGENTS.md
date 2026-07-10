@@ -30,6 +30,7 @@ src/legend_cards/
 ├── models.py            # CardSpec/BBox/ObjectSelection + card()/object_card() builders
 └── specs.py             # stable re-export shim (CARDS, CardSpec) — E501/RUF001 exempt
 legend.pdf               # immutable source (1 page, 595.22×842pt, vector/text, 0 images)
+LICENSE                  # canonical Mozilla Public License 2.0 text
 public/                  # generated deliverables (cards.json, symbols/*.png, contact-sheet.png)
 web/                     # AUTHORED static flashcard app; lives outside public/, not generated
 ├── index.html           # game markup
@@ -41,6 +42,7 @@ scripts/build-site.sh    # assembles public/ + web/ + .nojekyll into _site/ (dep
 _site/                   # gitignored, assembled-only deploy output (never authored/committed)
 tests/                   # test_extract_legend.py: runs real CLI entry point end-to-end
                          # test_flashcard_data.py: locks web/distractors.json shape/content
+                         # test_license.py/test_site_footer.py: license + repo-link contracts
 ```
 
 ## WHERE TO LOOK
@@ -55,6 +57,7 @@ tests/                   # test_extract_legend.py: runs real CLI entry point end
 | Edit flashcard game UI/logic | `web/app.js`, `web/index.html`, `web/styles.css` |
 | Add/adjust MC distractors | `web/distractors.json` — locked by `tests/test_flashcard_data.py` |
 | Preview/deploy the site | `.github/workflows/pages.yml`, `make preview`, `scripts/build-site.sh` |
+| Change project license/legal | `LICENSE`, `pyproject.toml` `license`/`license-files`, README `License` section |
 
 ## CODE MAP
 
@@ -116,3 +119,7 @@ Settings → Pages, set Source to "GitHub Actions".
 - `_site/` is assembled fresh each build/deploy and serves `distractors.json` from its root
   beside `cards.json`, so the app's relative asset paths resolve correctly, including under
   the `/airchart-flash-card/` Pages subpath.
+- Source code is licensed under MPL 2.0 (`LICENSE`; PEP 639 metadata in `pyproject.toml`).
+  The CAA-owned `legend.pdf` and derived symbols are not relicensed by the project license.
+- `web/index.html` ends with a footer linking to the GitHub repository using an inline SVG;
+  update that URL if the repository moves.
