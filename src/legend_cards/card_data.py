@@ -184,9 +184,9 @@ CARDS: Final[tuple[CardSpec, ...]] = (
         (490.75, 111.1, 553.6, 130.8),
     ),
     _card(
-        "advisory-route",
-        "Advisory route centre line and limits",
-        "Routes and points",
+        "controlled-airspace-class-f",
+        "Class F airspace boundary and vertical limits",
+        "Controlled airspace",
         (490.75, 132.75, 553.5, 149.75),
     ),
     _card(

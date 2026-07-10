@@ -347,17 +347,19 @@
     "Terminal control area boundary and flight levels",
     "Upper airspace boundary with base flight level"
   ],
-  "advisory-route": [
-    "Low level corridor or special route",
-    "Reporting point",
-    "Special access lane entry or exit",
-    "Visual reference point (VRP)",
-    "Advisory route reporting point",
-    "Mandatory VFR route centre line and limits",
-    "Recommended VFR route",
-    "Helicopter route centre line",
-    "Controlled airway centre line and limits",
-    "Low flying route with direction of flight"
+  "controlled-airspace-class-f": [
+    "Class A controlled airspace boundary and vertical limits",
+    "Class C controlled airspace boundary and vertical limits",
+    "Class D controlled airspace boundary and vertical limits",
+    "Class E controlled airspace boundary and vertical limits",
+    "Airspace not covered by Classes A-F (Class G)",
+    "Advisory route centre line and limits",
+    "Class F airspace notified by NOTAM",
+    "Upper advisory route boundary and vertical limits",
+    "Aerodrome traffic zone (ATZ)",
+    "Control zone boundary and altitude limits",
+    "Terminal control area boundary and flight levels",
+    "Upper airspace boundary with base flight level"
   ],
   "airspace-class-g": [
     "Class A controlled airspace boundary and vertical limits",

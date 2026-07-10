@@ -381,10 +381,10 @@
       }
     },
     {
-      "id": "advisory-route",
-      "definition": "Advisory route centre line and limits",
-      "category": "Routes and points",
-      "image": "symbols/advisory-route.png",
+      "id": "controlled-airspace-class-f",
+      "definition": "Class F airspace boundary and vertical limits",
+      "category": "Controlled airspace",
+      "image": "symbols/controlled-airspace-class-f.png",
       "source_pdf_bbox": {
         "page": 0,
         "x0": 490.75,
