@@ -11,6 +11,7 @@
     const els = {
         modeMc: document.getElementById('mode-mc'),
         modeAnswer: document.getElementById('mode-answer'),
+        categoryToggle: document.getElementById('category-toggle'),
         resetBtn: document.getElementById('reset'),
         scoreText: document.getElementById('score'),
         cardImage: document.getElementById('card-image'),
@@ -137,6 +138,14 @@
         return pool;
     }
 
+    function applyCategoryVisibility() {
+        if (els.categoryToggle.checked) {
+            els.cardCategory.classList.remove('hidden');
+        } else {
+            els.cardCategory.classList.add('hidden');
+        }
+    }
+
     function render() {
         answered = false;
         els.nextBtn.disabled = true;
@@ -146,6 +155,7 @@
         const card = deck[currentIndex];
         els.cardImage.src = card.image;
         els.cardCategory.textContent = card.category;
+        applyCategoryVisibility();
         els.cardProgress.textContent = `Card ${currentIndex + 1} / ${deck.length}`;
 
         if (mode === 'mc') {
@@ -224,6 +234,7 @@
     function setupEvents() {
         els.modeMc.addEventListener('click', () => setMode('mc'));
         els.modeAnswer.addEventListener('click', () => setMode('answer'));
+        els.categoryToggle.addEventListener('change', applyCategoryVisibility);
         els.resetBtn.addEventListener('click', resetGame);
         els.restartBtn.addEventListener('click', resetGame);
         els.nextBtn.addEventListener('click', nextCard);
@@ -236,13 +247,17 @@
                     handleMcAnswer(idx);
                 }
             } else if ((e.key === 'Enter' || e.key === ' ') && els.gameSection.style.display !== 'none') {
+                const isExcludedEl = document.activeElement === els.resetBtn ||
+                                     document.activeElement === els.modeMc ||
+                                     document.activeElement === els.modeAnswer ||
+                                     document.activeElement === els.categoryToggle;
                 if (mode === 'mc' && answered) {
-                    if (document.activeElement !== els.resetBtn && document.activeElement !== els.modeMc && document.activeElement !== els.modeAnswer) {
+                    if (!isExcludedEl) {
                         e.preventDefault();
                         nextCard();
                     }
                 } else if (mode === 'answer') {
-                    if (document.activeElement !== els.resetBtn && document.activeElement !== els.modeMc && document.activeElement !== els.modeAnswer) {
+                    if (!isExcludedEl) {
                         e.preventDefault();
                         if (!answered) {
                             handleReveal();
