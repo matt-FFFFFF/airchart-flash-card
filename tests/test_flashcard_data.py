@@ -119,9 +119,13 @@ def test_distractors_never_repeat_their_definition(
 def test_every_distractor_is_a_nonempty_string(
     distractors: dict[str, list[str]],
 ) -> None:
-    """Every distractor entry is a non-empty string."""
-    # When: pools containing a blank entry are collected.
-    blanks = {card_id: pool for card_id, pool in distractors.items() if not all(pool)}
+    """Every distractor entry is a non-empty string after stripping whitespace."""
+    # When: pools containing an empty or whitespace-only entry are collected.
+    blanks = {
+        card_id: pool
+        for card_id, pool in distractors.items()
+        if not all(entry.strip() for entry in pool)
+    }
 
     # Then: no pool contains an empty string.
     assert blanks == {}
