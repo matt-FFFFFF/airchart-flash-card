@@ -247,10 +247,9 @@
                     handleMcAnswer(idx);
                 }
             } else if ((e.key === 'Enter' || e.key === ' ') && els.gameSection.style.display !== 'none') {
-                const isExcludedEl = document.activeElement === els.resetBtn ||
-                                     document.activeElement === els.modeMc ||
-                                     document.activeElement === els.modeAnswer ||
-                                     document.activeElement === els.categoryToggle;
+                const activeElement = document.activeElement;
+                const isExcludedEl = activeElement instanceof HTMLElement &&
+                                     activeElement.matches('a, button, input');
                 if (mode === 'mc' && answered) {
                     if (!isExcludedEl) {
                         e.preventDefault();
