@@ -1,4 +1,4 @@
-.PHONY: setup build test generate clean
+.PHONY: setup build test generate clean preview
 
 setup:
 	uv sync --all-groups
@@ -16,3 +16,7 @@ generate: setup
 
 clean:
 	rm -rf .pytest_cache .ruff_cache dist
+
+preview:
+	bash scripts/build-site.sh
+	python3 -m http.server -d _site 8000
